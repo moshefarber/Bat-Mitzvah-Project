@@ -1,0 +1,129 @@
+<html>
+<head>
+	<title>Bat Mitzvah Project</title>
+	<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+	<script src="minJS.js"></script>
+	<script type="text/javascript" src="jquery.livegraph.js"></script>
+	<link rel="stylesheet" type="text/css" href="livegraph.css" />
+</head>
+<body>
+	<img id="logo" src="logo.png"> 
+	<img id="logoRight" src="logo.png"> 
+	<div id="page" class="content">
+		<h2 style="font-family:Comic Sans MS, cursive, sans-serif">Original Data</h2>
+
+			<table class="dataforgraph">
+				<thead>
+					<td>Bar</td>
+					<td>Value</td>
+				</thead>
+				<tr>
+					<td>Morasha</td>
+					<td>0</td>
+				</tr>
+				<tr>
+					<td>Kulanu</td>
+					<td>0</td>
+				</tr>
+				<tr>
+					<td>Kids4Evan</td>
+					<td>0</td>
+				</tr>
+				<tr>
+					<td>Shaare Zedek</td>
+					<td>0</td>
+				</tr>
+				<tfoot>
+					<td colspan=2><button class="makeGraph">Make Graph</button></td>
+				</tfoot>
+			</table>
+	</div>
+	<div id="update" style="display:none;">
+		<table class="updatedata">
+			<thead>
+				<td>Bar</td>
+				<td>Value</td>
+			</thead>
+			<tbody>
+				<tr>
+					<td>Morasha</td>
+					<td>0</td>
+				</tr>
+				<tr>
+					<td>Kulanu</td>
+					<td>0</td>
+				</tr>
+				<tr>
+					<td>Kids4Evan</td>
+					<td>0</td>
+				</tr>
+					<td>Shaare Zedek</td>
+					<td>0</td>
+				</tr>
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan=2><button class="updateGraph">Update</button></td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+	<script type="text/javascript">
+			$(document).ready(function() {
+				$('button.makeGraph').click(function() {
+					$('#page').liveGraph({
+						height : 350,
+						barWidth : 100,
+						barGapSize : 2,
+						data : 'table.dataforgraph',
+						hideData : true
+					});
+					$('div#update').show();
+					$('#page').data('liveGraph').settings.hideData = false;
+					$('#page h2').html("How should we split $3600 of tzedakah?");
+					$('#page div.controls').show();
+					$('.animation').change(function(){
+						if ($(this).val() == "true") {
+							$('#page').data('liveGraph').settings.animate = true;
+						} else {
+							$('#page').data('liveGraph').settings.animate = false;
+						}
+					});
+					$('.animTime').change(function() {
+						$('#page').data('liveGraph').settings.animTime = parseInt($(this).val());
+					});
+				});
+				$('table.updatedata').find('tbody tr').each(function() {
+					var label = $(this).find('td').first();
+					var oldlab = label.html();
+					var value = $(this).find('td').last();
+					var oldval = value.html();
+					value.html("<input type='text' value='"+oldval+"' />");
+					label.html("<input type='text' value='"+oldlab+"' />");
+				});
+				$('button.updateGraph').click(function() {
+					$('table.updatedata').find('tbody tr').each(function() {
+						var label = $(this).find('td').first();
+						var value = $(this).find('td').last();
+						var val = value.find('input').val();
+						var lab = label.find('input').val();
+						value.html(val);
+						label.html(lab);
+					});
+					$('#page').liveGraph('update', 'table.updatedata');
+					$('table.updatedata').find('tbody tr').each(function() {
+						var label = $(this).find('td').first();
+						var oldlab = label.html();
+						var value = $(this).find('td').last();
+						var oldval = value.html();
+						value.html("<input type='text' value='"+oldval+"' />");
+						label.html("<input type='text' value='"+oldlab+"' />");
+					});
+				});				
+			});
+	
+	</script>
+
+    <script type="text/javascript"></script>
+</body>
+</html>
